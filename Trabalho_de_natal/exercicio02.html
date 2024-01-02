@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+
+        function getTextFromApi() {
+            return new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest()
+                request.open("GET", "https://cat-fact.herokuapp.com/facts");
+                request.responseType = `json`;
+                request.onload = function () {
+                    const list = request.response;
+                    const getText = list.map(element => element.text);
+                    const textSplit = getText.join("                               ")
+                    if (getText.length > 0) {
+                        resolve(`${textSplit}`);
+                    } else {
+                        reject(`Não tem textos no array`)
+                    }
+                }
+
+                request.onerror = function () {
+                    reject("Erro de conexão");
+                };
+                request.send();
+
+            })
+        }
+
+        getTextFromApi()
+            .then((msg) => {
+                console.log(msg)
+            }).catch((error) => {
+                console.log(error)
+            });
+
+
+
+
+
+        //--------------------------------------------------------------------------------
+
+
+        function getApi() {
+            fetch("https://cat-fact.herokuapp.com/facts/ ")
+                .then(res => {
+                    return res.json();
+                })
+                .then(obj => {
+
+                    let list = obj;
+                    let textList = list.map(element => element.text);
+                    if (textList.length > 0) {
+                        console.log(`${textList}`);
+                    } else {
+                        console.log(`Não tem textos`)
+                    }
+
+                })
+                .catch(error => console.log("error"));
+        }
+
+        getApi()
+
+
+
+
+    </script>
+</body>
+
+</html>
